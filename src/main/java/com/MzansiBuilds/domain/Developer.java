@@ -17,19 +17,19 @@ public class Developer {
     private String bio;
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     private LocalDateTime updated_at;
 
     public Developer() {
     }
 
-    public Developer(int developer_id, String username, String email, String password, String bio, LocalDateTime created_at, LocalDateTime updated_at) {
+    public Developer(int developer_id, String username, String email, String password, String bio, LocalDateTime createdAt, LocalDateTime updated_at) {
         this.username = username;
         this.developer_id = developer_id;
         this.email = email;
         this.password = password;
         this.bio = bio;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
         this.updated_at = updated_at;
     }
 
@@ -38,7 +38,7 @@ public class Developer {
         this.email = developerBuilder.email;
         this.password = developerBuilder.password;
         this.bio = developerBuilder.bio;
-        this.created_at = developerBuilder.created_at;
+        this.createdAt = developerBuilder.createdAt;
         this.updated_at = developerBuilder.updated_at;
     }
 
@@ -62,8 +62,8 @@ public class Developer {
         return bio;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public LocalDateTime getUpdated_at() {
@@ -78,7 +78,7 @@ public class Developer {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
-                ", created_at=" + created_at +
+                ", created_at=" + createdAt +
                 ", updated_at=" + updated_at +
                 '}';
     }
@@ -88,7 +88,7 @@ public class Developer {
         private String email;
         private String password;
         private String bio;
-        private LocalDateTime created_at;
+        private LocalDateTime createdAt;
         private LocalDateTime updated_at;
 
         public DeveloperBuilder setUsername(String username) {
@@ -111,8 +111,8 @@ public class Developer {
             return this;
         }
 
-        public DeveloperBuilder setCreated_at(LocalDateTime created_at) {
-            this.created_at = created_at;
+        public DeveloperBuilder setCreatedAt(LocalDateTime created_at) {
+            this.createdAt = created_at;
             return this;
         }
 
