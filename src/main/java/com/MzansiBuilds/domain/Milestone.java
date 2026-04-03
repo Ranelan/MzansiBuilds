@@ -15,7 +15,7 @@ public class Milestone {
     private String description;
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime achieved_at;
+    private LocalDateTime achievedAt;
 
     //Relationship with Project, Many milestones can be associated with one project.
     @ManyToOne
@@ -26,11 +26,11 @@ public class Milestone {
     }
 
     //Constructor that takes all fields as parameters.
-    public Milestone(int milestone_id, String title, String description, LocalDateTime achieved_at, Project project) {
+    public Milestone(int milestone_id, String title, String description, LocalDateTime achievedAt, Project project) {
         this.milestone_id = milestone_id;
         this.title = title;
         this.description = description;
-        this.achieved_at = achieved_at;
+        this.achievedAt = achievedAt;
         this.project = project;
     }
 
@@ -38,6 +38,7 @@ public class Milestone {
     public Milestone(MilestoneBuilder milestoneBuilder) {
         this.title = milestoneBuilder.title;
         this.description = milestoneBuilder.description;
+        this.project = milestoneBuilder.project;
     }
 
     //Getters for all fieldS.
@@ -53,8 +54,8 @@ public class Milestone {
         return description;
     }
 
-    public LocalDateTime getAchieved_at() {
-        return achieved_at;
+    public LocalDateTime getAchievedAt() {
+        return achievedAt;
     }
 
     public Project getProject() {
@@ -68,7 +69,7 @@ public class Milestone {
                 "milestone_id=" + milestone_id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", achieved_at=" + achieved_at +
+                ", achieved at=" + achievedAt +
                 ", project=" + project +
                 '}';
     }
