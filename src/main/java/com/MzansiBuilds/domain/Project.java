@@ -18,8 +18,8 @@ public class Project {
     private String repoLink;
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     //Enums for project stage and support needed.
     @Enumerated(EnumType.STRING)
@@ -38,14 +38,14 @@ public class Project {
     }
 
     //Constructor that takes all fields as parameters.
-    public Project(int project_id, String title, String description, String techStack, String repoLink, LocalDateTime created_at, LocalDateTime updated_at, List<ProjectStage> projectStage, List<Support> supportNeeded, Developer developer) {
+    public Project(int project_id, String title, String description, String techStack, String repoLink, LocalDateTime createdAt, LocalDateTime updatedAt, List<ProjectStage> projectStage, List<Support> supportNeeded, Developer developer) {
         this.project_id = project_id;
         this.title = title;
         this.description = description;
         this.techStack = techStack;
         this.repoLink = repoLink;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.projectStage = projectStage;
         this.supportNeeded = supportNeeded;
         this.developer = developer;
@@ -57,7 +57,7 @@ public class Project {
         this.description = projectBuilder.description;
         this.techStack = projectBuilder.techStack;
         this.repoLink = projectBuilder.repoLink;
-        this.updated_at = projectBuilder.updated_at;
+        this.updatedAt = projectBuilder.updatedAt;
         this.projectStage = projectBuilder.projectStage;
         this.supportNeeded = projectBuilder.supportNeeded;
         this.developer = projectBuilder.developer;
@@ -84,12 +84,12 @@ public class Project {
         return repoLink;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public List<ProjectStage> getProjectStage() {
@@ -113,8 +113,8 @@ public class Project {
                 ", description='" + description + '\'' +
                 ", techStack='" + techStack + '\'' +
                 ", repoLink='" + repoLink + '\'' +
-                ", created_at=" + created_at +
-                ", updated_at=" + updated_at +
+                ", created_at=" + createdAt +
+                ", updated_at=" + updatedAt +
                 ", projectStage=" + projectStage +
                 ", supportNeeded=" + supportNeeded +
                 ", developer=" + developer +
@@ -127,7 +127,7 @@ public class Project {
         private String description;
         private String techStack;
         private String repoLink;
-        private LocalDateTime updated_at;
+        private LocalDateTime updatedAt;
         private List<ProjectStage> projectStage;
         private List<Support> supportNeeded;
         private Developer developer;
@@ -154,8 +154,8 @@ public class Project {
         }
 
 
-        public ProjectBuilder setUpdated_at(LocalDateTime updated_at) {
-            this.updated_at = updated_at;
+        public ProjectBuilder setUpdatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
             return this;
         }
 
@@ -180,7 +180,7 @@ public class Project {
             this.description = project.description;
             this.techStack = project.techStack;
             this.repoLink = project.repoLink;
-            this.updated_at = project.updated_at;
+            this.updatedAt = project.updatedAt;
             this.projectStage = project.projectStage;
             this.supportNeeded = project.supportNeeded;
             this.developer = project.developer;
