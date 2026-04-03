@@ -13,6 +13,7 @@ public class Comment {
     private int comment_id;
     private String content;
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime created_at;
 
     //Relationship with Developer, Many comments can be made by one developer.

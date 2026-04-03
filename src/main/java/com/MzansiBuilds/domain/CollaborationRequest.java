@@ -13,6 +13,7 @@ public class CollaborationRequest {
     private int request_id;
     private String message;
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime created_at;
 
     @Enumerated(EnumType.STRING)
@@ -46,7 +47,6 @@ public class CollaborationRequest {
     //Constructor that takes a builder object, allowing for flexible and readable object creation.
     public CollaborationRequest(CollaborationRequestBuilder collaborationRequestBuilder) {
         this.message = collaborationRequestBuilder.message;
-        this.created_at = collaborationRequestBuilder.created_at;
         this.status = collaborationRequestBuilder.status;
         this.developer = collaborationRequestBuilder.developer;
         this.project = collaborationRequestBuilder.project;
@@ -93,7 +93,6 @@ public class CollaborationRequest {
     //Builder class for CollaborationRequest, allowing for flexible and readable object creation.
     public static class CollaborationRequestBuilder {
         private String message;
-        private LocalDateTime created_at;
         private RequestStatus status;
         private Developer developer;
         private Project project;
@@ -103,10 +102,6 @@ public class CollaborationRequest {
             return this;
         }
 
-        public CollaborationRequestBuilder setCreated_at(LocalDateTime created_at) {
-            this.created_at = created_at;
-            return this;
-        }
 
         public CollaborationRequestBuilder setStatus(RequestStatus status) {
             this.status = status;
@@ -126,7 +121,6 @@ public class CollaborationRequest {
         //Copy method to be used for updating, Allowing to modify only the fields that need to be updated while keeping the rest of the data intact.
         public CollaborationRequestBuilder copy(CollaborationRequest collaborationRequest) {
             this.message = collaborationRequest.message;
-            this.created_at = collaborationRequest.created_at;
             this.status = collaborationRequest.status;
             this.developer = collaborationRequest.developer;
             this.project = collaborationRequest.project;
