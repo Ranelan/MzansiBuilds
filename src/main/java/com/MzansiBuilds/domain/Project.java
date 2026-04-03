@@ -17,6 +17,7 @@ public class Project {
     private String techStack;
     private String repoLink;
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
@@ -56,10 +57,10 @@ public class Project {
         this.description = projectBuilder.description;
         this.techStack = projectBuilder.techStack;
         this.repoLink = projectBuilder.repoLink;
-        this.created_at = projectBuilder.created_at;
         this.updated_at = projectBuilder.updated_at;
         this.projectStage = projectBuilder.projectStage;
         this.supportNeeded = projectBuilder.supportNeeded;
+        this.developer = projectBuilder.developer;
     }
 
     //Getters for all fields.
@@ -126,7 +127,6 @@ public class Project {
         private String description;
         private String techStack;
         private String repoLink;
-        private LocalDateTime created_at;
         private LocalDateTime updated_at;
         private List<ProjectStage> projectStage;
         private List<Support> supportNeeded;
@@ -153,10 +153,6 @@ public class Project {
             return this;
         }
 
-        public ProjectBuilder setCreated_at(LocalDateTime created_at) {
-            this.created_at = created_at;
-            return this;
-        }
 
         public ProjectBuilder setUpdated_at(LocalDateTime updated_at) {
             this.updated_at = updated_at;
@@ -184,10 +180,10 @@ public class Project {
             this.description = project.description;
             this.techStack = project.techStack;
             this.repoLink = project.repoLink;
-            this.created_at = project.created_at;
             this.updated_at = project.updated_at;
             this.projectStage = project.projectStage;
             this.supportNeeded = project.supportNeeded;
+            this.developer = project.developer;
             return this;
         }
 

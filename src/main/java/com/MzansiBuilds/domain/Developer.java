@@ -11,6 +11,7 @@ public class Developer {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private int developer_id;
+    private String username;
     private String email;
     private String password;
     private String bio;
@@ -22,7 +23,8 @@ public class Developer {
     public Developer() {
     }
 
-    public Developer(int developer_id, String email, String password, String bio, LocalDateTime created_at, LocalDateTime updated_at) {
+    public Developer(int developer_id, String username, String email, String password, String bio, LocalDateTime created_at, LocalDateTime updated_at) {
+        this.username = username;
         this.developer_id = developer_id;
         this.email = email;
         this.password = password;
@@ -32,6 +34,7 @@ public class Developer {
     }
 
     public Developer(DeveloperBuilder developerBuilder) {
+        this.username = developerBuilder.username;
         this.email = developerBuilder.email;
         this.password = developerBuilder.password;
         this.bio = developerBuilder.bio;
@@ -41,6 +44,10 @@ public class Developer {
 
     public int getDeveloper_id() {
         return developer_id;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
@@ -67,6 +74,7 @@ public class Developer {
     public String toString() {
         return "Developer{" +
                 "developer_id=" + developer_id +
+                "username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
@@ -76,13 +84,17 @@ public class Developer {
     }
 
     public static class DeveloperBuilder {
-        private int developer_id;
+        private String username;
         private String email;
         private String password;
         private String bio;
         private LocalDateTime created_at;
         private LocalDateTime updated_at;
 
+        public DeveloperBuilder setUsername(String username) {
+            this.username = username;
+            return this;
+        }
 
         public DeveloperBuilder setEmail(String email) {
             this.email = email;
@@ -110,10 +122,10 @@ public class Developer {
         }
 
         public DeveloperBuilder copy(Developer developer) {
+            this.username = developer.username;
             this.email = developer.email;
             this.password = developer.password;
             this.bio = developer.bio;
-            this.created_at = developer.created_at;
             this.updated_at = developer.updated_at;
             return this;
         }
