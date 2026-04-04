@@ -11,7 +11,7 @@ public class Project {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private int project_id;
+    private int projectId;
     private String title;
     private String description;
     private String techStack;
@@ -38,8 +38,8 @@ public class Project {
     }
 
     //Constructor that takes all fields as parameters.
-    public Project(int project_id, String title, String description, String techStack, String repoLink, LocalDateTime createdAt, LocalDateTime updatedAt, List<ProjectStage> projectStage, List<Support> supportNeeded, Developer developer) {
-        this.project_id = project_id;
+    public Project(int projectId, String title, String description, String techStack, String repoLink, LocalDateTime createdAt, LocalDateTime updatedAt, List<ProjectStage> projectStage, List<Support> supportNeeded, Developer developer) {
+        this.projectId = projectId;
         this.title = title;
         this.description = description;
         this.techStack = techStack;
@@ -64,8 +64,8 @@ public class Project {
     }
 
     //Getters for all fields.
-    public int getProject_id() {
-        return project_id;
+    public int getProjectId() {
+        return projectId;
     }
 
     public String getTitle() {
@@ -108,7 +108,7 @@ public class Project {
     @Override
     public String toString() {
         return "Project{" +
-                "project_id=" + project_id +
+                "project_id=" + projectId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", techStack='" + techStack + '\'' +
