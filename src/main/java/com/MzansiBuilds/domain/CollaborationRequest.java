@@ -14,7 +14,7 @@ public class CollaborationRequest {
     private String message;
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
@@ -35,10 +35,10 @@ public class CollaborationRequest {
     }
 
     //Constructor that takes all fields as parameters.
-    public CollaborationRequest(int request_id, String message, LocalDateTime created_at, RequestStatus status, Developer developer, Project project) {
+    public CollaborationRequest(int request_id, String message, LocalDateTime createdAt, RequestStatus status, Developer developer, Project project) {
         this.request_id = request_id;
         this.message = message;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
         this.status = status;
         this.developer = developer;
         this.project = project;
@@ -61,8 +61,8 @@ public class CollaborationRequest {
         return message;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public RequestStatus getStatus() {
@@ -83,7 +83,7 @@ public class CollaborationRequest {
         return "CollaborationRequest{" +
                 "request_id=" + request_id +
                 ", message='" + message + '\'' +
-                ", created_at=" + created_at +
+                ", created_at=" + createdAt +
                 ", status=" + status +
                 ", developer=" + developer +
                 ", project=" + project +
