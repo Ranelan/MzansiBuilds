@@ -1,12 +1,14 @@
 package com.MzansiBuilds.service.imp;
 
 import com.MzansiBuilds.domain.Project;
+import com.MzansiBuilds.enums.ProjectStage;
 import com.MzansiBuilds.repository.ProjectRepository;
 import com.MzansiBuilds.service.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,14 +50,48 @@ public class ProjectService implements IProjectService {
         return null;
     }
 
+
+    //AI Suggestion used here, reviewed the code before implementing,
+    // the method checks if the project exists, if it does it adds the LAUNCHED stage to the project stages.
     @Override
     public Project completeProject(Integer projectId) {
-        return null;
+        if (projectId == null) {
+            return null;
+        }
+
+        Optional<Project> existingProject = projectRepository.findById(projectId);
+        if (existingProject.isEmpty()) {
+            return null;
+        }
+
+        Project current = existingProject.get();
+        List<ProjectStage> stages = current.getProjectStage() == null
+                ? new ArrayList<>()
+                : new ArrayList<>(current.getProjectStage());
+
+        if (!stages.contains(ProjectStage.LAUNCHED)) {
+            stages.add(ProjectStage.LAUNCHED);
+        }
+
+        Project completedProject = new Project(
+                current.getProjectId(),
+                current.getTitle(),
+                current.getDescription(),
+                current.getTechStack(),
+                current.getRepoLink(),
+                current.getCreatedAt(),
+                LocalDateTime.now(),
+                stages,
+                current.getSupportNeeded(),
+                current.getDeveloper()
+        );
+
+        return projectRepository.save(completedProject);
     }
 
     @Override
     public List<Project> findCelebrationWallProjects() {
-        return List.of();
+        return projectRepository.findByProjectStageContainingOrderByUpdatedAtDesc(ProjectStage.LAUNCHED);
     }
 
     @Override
@@ -64,18 +100,18 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public List<Project> findByProjectStage(List<String> projectStage) {
-        return List.of();
+    public List<Project> findByProjectStage(List<ProjectStage> projectStage) {
+        return projectRepository.findByProjectStage(projectStage);
     }
 
     @Override
     public List<Project> findByTitle(String title) {
-        return List.of();
+        return projectRepository.findByTitle(title);
     }
 
     @Override
     public List<Project> findByDeveloperId(Integer developerId) {
-        return List.of();
+        return projectRepository.findByDeveloperDeveloperId(developerId);
     }
 
     @Override
@@ -83,4 +119,3 @@ public class ProjectService implements IProjectService {
             projectRepository.deleteById(id);
     }
 }
-

@@ -2,8 +2,8 @@ package com.MzansiBuilds.factory;
 
 import com.MzansiBuilds.domain.Developer;
 import com.MzansiBuilds.domain.Project;
-import com.MzansiBuilds.domain.ProjectStage;
-import com.MzansiBuilds.domain.Support;
+import com.MzansiBuilds.enums.ProjectStage;
+import com.MzansiBuilds.enums.Support;
 import com.MzansiBuilds.util.Helper;
 
 import java.time.LocalDateTime;

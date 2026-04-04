@@ -1,5 +1,7 @@
 package com.MzansiBuilds.domain;
 
+import com.MzansiBuilds.enums.ProjectStage;
+import com.MzansiBuilds.enums.Support;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
