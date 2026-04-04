@@ -1,4 +1,4 @@
-package com.MzansiBuilds.domain;
+package com.MzansiBuilds.enums;
 
 public enum Support {
     COLLABORATOR,
