@@ -14,7 +14,7 @@ public class Comment {
     private String content;
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     //Relationship with Developer, Many comments can be made by one developer.
     @ManyToOne
@@ -29,10 +29,10 @@ public class Comment {
     }
 
     //Constructor that takes all fields as parameters.
-    public Comment(int comment_id, String content, LocalDateTime created_at, Developer developer, Project project) {
+    public Comment(int comment_id, String content, LocalDateTime createdAt, Developer developer, Project project) {
         this.comment_id = comment_id;
         this.content = content;
-        this.created_at = created_at;
+        this.createdAt = createdAt;
         this.developer = developer;
         this.project = project;
     }
@@ -40,7 +40,6 @@ public class Comment {
     //Constructor that takes a builder object, allowing for flexible and readable object creation.
     public Comment(CommentBuilder commentBuilder) {
         this.content = commentBuilder.content;
-        this.created_at = commentBuilder.created_at;
         this.developer = commentBuilder.developer;
         this.project = commentBuilder.project;
     }
@@ -55,8 +54,8 @@ public class Comment {
         return content;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public Developer getDeveloper() {
@@ -73,7 +72,7 @@ public class Comment {
         return "Comment{" +
                 "comment_id=" + comment_id +
                 ", content='" + content + '\'' +
-                ", created_at=" + created_at +
+                ", created_at=" + createdAt +
                 ", developer=" + developer +
                 ", project=" + project +
                 '}';
@@ -81,17 +80,11 @@ public class Comment {
 
     public static class CommentBuilder {
         private String content;
-        private LocalDateTime created_at;
         private Developer developer;
         private Project project;
 
         public CommentBuilder setContent(String content) {
             this.content = content;
-            return this;
-        }
-
-        public CommentBuilder setCreated_at(LocalDateTime created_at) {
-            this.created_at = created_at;
             return this;
         }
 
