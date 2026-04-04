@@ -38,7 +38,6 @@ public class Developer {
         this.email = developerBuilder.email;
         this.password = developerBuilder.password;
         this.bio = developerBuilder.bio;
-        this.createdAt = developerBuilder.createdAt;
         this.updated_at = developerBuilder.updated_at;
     }
 
@@ -88,7 +87,6 @@ public class Developer {
         private String email;
         private String password;
         private String bio;
-        private LocalDateTime createdAt;
         private LocalDateTime updated_at;
 
         public DeveloperBuilder setUsername(String username) {
@@ -111,10 +109,6 @@ public class Developer {
             return this;
         }
 
-        public DeveloperBuilder setCreatedAt(LocalDateTime created_at) {
-            this.createdAt = created_at;
-            return this;
-        }
 
         public DeveloperBuilder setUpdated_at(LocalDateTime updated_at) {
             this.updated_at = updated_at;
