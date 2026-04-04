@@ -10,7 +10,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int comment_id;
+    private int commentId;
     private String content;
     @CreationTimestamp
     @Column(updatable = false)
@@ -29,8 +29,8 @@ public class Comment {
     }
 
     //Constructor that takes all fields as parameters.
-    public Comment(int comment_id, String content, LocalDateTime createdAt, Developer developer, Project project) {
-        this.comment_id = comment_id;
+    public Comment(int commentId, String content, LocalDateTime createdAt, Developer developer, Project project) {
+        this.commentId = commentId;
         this.content = content;
         this.createdAt = createdAt;
         this.developer = developer;
@@ -46,8 +46,8 @@ public class Comment {
 
     //Getters for all fields.
 
-    public int getComment_id() {
-        return comment_id;
+    public int getCommentId() {
+        return commentId;
     }
 
     public String getContent() {
@@ -70,7 +70,7 @@ public class Comment {
     @Override
     public String toString() {
         return "Comment{" +
-                "comment_id=" + comment_id +
+                "comment_id=" + commentId +
                 ", content='" + content + '\'' +
                 ", created_at=" + createdAt +
                 ", developer=" + developer +
