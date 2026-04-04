@@ -3,7 +3,7 @@ package com.MzansiBuilds.factory;
 import com.MzansiBuilds.domain.CollaborationRequest;
 import com.MzansiBuilds.domain.Developer;
 import com.MzansiBuilds.domain.Project;
-import com.MzansiBuilds.domain.RequestStatus;
+import com.MzansiBuilds.enums.RequestStatus;
 import com.MzansiBuilds.util.Helper;
 
 import java.time.LocalDateTime;

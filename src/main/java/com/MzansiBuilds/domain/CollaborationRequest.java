@@ -1,5 +1,6 @@
 package com.MzansiBuilds.domain;
 
+import com.MzansiBuilds.enums.RequestStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,7 +11,7 @@ public class CollaborationRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int request_id;
+    private int requestId;
     private String message;
     @CreationTimestamp
     @Column(updatable = false)
@@ -35,8 +36,8 @@ public class CollaborationRequest {
     }
 
     //Constructor that takes all fields as parameters.
-    public CollaborationRequest(int request_id, String message, LocalDateTime createdAt, RequestStatus status, Developer developer, Project project) {
-        this.request_id = request_id;
+    public CollaborationRequest(int requestId, String message, LocalDateTime createdAt, RequestStatus status, Developer developer, Project project) {
+        this.requestId = requestId;
         this.message = message;
         this.createdAt = createdAt;
         this.status = status;
@@ -53,8 +54,8 @@ public class CollaborationRequest {
     }
 
     //Getters for all fields.
-    public int getRequest_id() {
-        return request_id;
+    public int getRequestId() {
+        return requestId;
     }
 
     public String getMessage() {
@@ -81,7 +82,7 @@ public class CollaborationRequest {
     @Override
     public String toString() {
         return "CollaborationRequest{" +
-                "request_id=" + request_id +
+                "request_id=" + requestId +
                 ", message='" + message + '\'' +
                 ", created_at=" + createdAt +
                 ", status=" + status +
