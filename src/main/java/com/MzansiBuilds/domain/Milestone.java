@@ -10,7 +10,7 @@ public class Milestone {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private int milestone_id;
+    private int milestoneId;
     private String title;
     private String description;
     @CreationTimestamp
@@ -26,8 +26,8 @@ public class Milestone {
     }
 
     //Constructor that takes all fields as parameters.
-    public Milestone(int milestone_id, String title, String description, LocalDateTime achievedAt, Project project) {
-        this.milestone_id = milestone_id;
+    public Milestone(int milestoneId, String title, String description, LocalDateTime achievedAt, Project project) {
+        this.milestoneId = milestoneId;
         this.title = title;
         this.description = description;
         this.achievedAt = achievedAt;
@@ -42,8 +42,8 @@ public class Milestone {
     }
 
     //Getters for all fieldS.
-    public int getMilestone_id() {
-        return milestone_id;
+    public int getMilestoneId() {
+        return milestoneId;
     }
 
     public String getTitle() {
@@ -66,7 +66,7 @@ public class Milestone {
     @Override
     public String toString() {
         return "Milestone{" +
-                "milestone_id=" + milestone_id +
+                "milestone_id=" + milestoneId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", achieved at=" + achievedAt +
