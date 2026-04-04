@@ -10,6 +10,4 @@ public interface DeveloperRepository extends JpaRepository<Developer,Integer> {
     Optional<Developer> findByUsername(String name);
     Optional<Developer> findByEmail(String email);
 
-    boolean existsByUsername(String username);
-    boolean existsByEmail(String email);
 }
