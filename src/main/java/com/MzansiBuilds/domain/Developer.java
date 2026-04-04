@@ -1,7 +1,12 @@
 package com.MzansiBuilds.domain;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 import java.time.LocalDateTime;
 
@@ -10,39 +15,39 @@ public class Developer {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private int developer_id;
+    private int developerId;
     private String username;
     private String email;
     private String password;
     private String bio;
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime created_at;
     private LocalDateTime updated_at;
 
     public Developer() {
     }
 
-    public Developer(int developer_id, String username, String email, String password, String bio, LocalDateTime createdAt, LocalDateTime updated_at) {
+    public Developer(int developerId, String username, String email, String password, String bio, LocalDateTime created_at, LocalDateTime updated_at) {
+        this.developerId = developerId;
         this.username = username;
-        this.developer_id = developer_id;
         this.email = email;
         this.password = password;
         this.bio = bio;
-        this.createdAt = createdAt;
+        this.created_at = created_at;
         this.updated_at = updated_at;
     }
 
     public Developer(DeveloperBuilder developerBuilder) {
-        this.username = developerBuilder.username;
         this.email = developerBuilder.email;
+        this.username = developerBuilder.username;
         this.password = developerBuilder.password;
         this.bio = developerBuilder.bio;
+        this.created_at = developerBuilder.created_at;
         this.updated_at = developerBuilder.updated_at;
     }
 
-    public int getDeveloper_id() {
-        return developer_id;
+    public int getDeveloperId() {
+        return developerId;
     }
 
     public String getUsername() {
@@ -61,23 +66,37 @@ public class Developer {
         return bio;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
     public LocalDateTime getUpdated_at() {
         return updated_at;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        if (created_at == null) {
+            created_at = now;
+        }
+        updated_at = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated_at = LocalDateTime.now();
+    }
+
     @Override
     public String toString() {
         return "Developer{" +
-                "developer_id=" + developer_id +
-                "username='" + username + '\'' +
+                "developer_id=" + developerId +
+                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
-                ", created_at=" + createdAt +
+                ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
                 '}';
     }
@@ -87,6 +106,7 @@ public class Developer {
         private String email;
         private String password;
         private String bio;
+        private LocalDateTime created_at;
         private LocalDateTime updated_at;
 
         public DeveloperBuilder setUsername(String username) {
@@ -109,6 +129,10 @@ public class Developer {
             return this;
         }
 
+        public DeveloperBuilder setCreated_at(LocalDateTime created_at) {
+            this.created_at = created_at;
+            return this;
+        }
 
         public DeveloperBuilder setUpdated_at(LocalDateTime updated_at) {
             this.updated_at = updated_at;
@@ -120,6 +144,7 @@ public class Developer {
             this.email = developer.email;
             this.password = developer.password;
             this.bio = developer.bio;
+            this.created_at = developer.created_at;
             this.updated_at = developer.updated_at;
             return this;
         }
