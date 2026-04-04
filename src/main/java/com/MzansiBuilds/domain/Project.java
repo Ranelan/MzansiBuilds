@@ -29,7 +29,7 @@ public class Project {
 
     //relationship with Developer, Many projects can be created by one developer.
     @ManyToOne
-    @JoinColumn(name = "developer_id")
+    @JoinColumn(name = "developerId")
     private Developer developer;
 
     //Constructor without parameters.
