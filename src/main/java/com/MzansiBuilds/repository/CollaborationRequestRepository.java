@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface CollaborationRequestRepository extends JpaRepository<CollaborationRequest, Integer> {
 
-    List<CollaborationRequest> findByProjectId(Integer projectId);
-    List<CollaborationRequest> findByRequestStatus(List<RequestStatus> requestStatus);
+    List<CollaborationRequest> findRequestByProjectId(Integer projectId);
+    List<CollaborationRequest> findRequestByDeveloperId(Integer developerId);
+
 }

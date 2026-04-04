@@ -21,7 +21,7 @@ public class CollaborationRequest {
 
     //Relationship with Developer, Many collaboration requests can be sent by one developer.
     @ManyToOne
-    @JoinColumn(name = "developer_id")
+    @JoinColumn(name = "developerId")
     private Developer developer;
 
     //Relationship with Project, Many collaboration requests can be associated with one project.
