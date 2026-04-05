@@ -4,6 +4,7 @@ import com.MzansiBuilds.enums.ProjectStage;
 import com.MzansiBuilds.enums.Support;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,14 +19,18 @@ public class Project {
     private String description;
     private String techStack;
     private String repoLink;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     //Enums for project stage and support needed.
     @Enumerated(EnumType.STRING)
     private List<ProjectStage> projectStage;
+
     @Enumerated(EnumType.STRING)
     private List<Support> supportNeeded;
 
@@ -55,11 +60,11 @@ public class Project {
 
     //Constructor that takes a builder object, allowing for flexible and readable object creation.
     public Project(ProjectBuilder projectBuilder) {
+        this.projectId = projectBuilder.projectId;
         this.title = projectBuilder.title;
         this.description = projectBuilder.description;
         this.techStack = projectBuilder.techStack;
         this.repoLink = projectBuilder.repoLink;
-        this.updatedAt = projectBuilder.updatedAt;
         this.projectStage = projectBuilder.projectStage;
         this.supportNeeded = projectBuilder.supportNeeded;
         this.developer = projectBuilder.developer;
@@ -125,16 +130,21 @@ public class Project {
 
     //Builder pattern.
     public static class ProjectBuilder {
+        private int projectId;
         private String title;
         private String description;
         private String techStack;
         private String repoLink;
-        private LocalDateTime updatedAt;
         private List<ProjectStage> projectStage;
         private List<Support> supportNeeded;
         private Developer developer;
 
-        //Setters for each field, returning the builder instance..
+        //Setters for each field, returning the builder instance.
+        public ProjectBuilder setProjectId(int projectId) {
+            this.projectId = projectId;
+            return this;
+        }
+
         public ProjectBuilder setTitle(String title) {
             this.title = title;
             return this;
@@ -156,11 +166,6 @@ public class Project {
         }
 
 
-        public ProjectBuilder setUpdatedAt(LocalDateTime updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
         public ProjectBuilder setProjectStage(List<ProjectStage> projectStage) {
             this.projectStage = projectStage;
             return this;
@@ -178,11 +183,11 @@ public class Project {
 
         //Copy method to be used for updating, Allowing to modify only the fields that need to be updated while keeping the rest of the data intact.
         public ProjectBuilder copy(Project project) {
+            this.projectId = project.getProjectId();
             this.title = project.title;
             this.description = project.description;
             this.techStack = project.techStack;
             this.repoLink = project.repoLink;
-            this.updatedAt = project.updatedAt;
             this.projectStage = project.projectStage;
             this.supportNeeded = project.supportNeeded;
             this.developer = project.developer;

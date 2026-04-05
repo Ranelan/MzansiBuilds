@@ -30,7 +30,6 @@ public class ProjectFactory {
                 .setDescription(description)
                 .setTechStack(techStack)
                 .setRepoLink(repoLink)
-                .setUpdatedAt(updatedAt)
                 .setProjectStage(projectStage)
                 .setSupportNeeded(supportNeeded)
                 .setDeveloper(developer)

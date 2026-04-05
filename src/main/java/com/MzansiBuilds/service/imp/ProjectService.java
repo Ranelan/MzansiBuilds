@@ -43,7 +43,6 @@ public class ProjectService implements IProjectService {
                     .setRepoLink(project.getRepoLink())
                     .setProjectStage(project.getProjectStage())
                     .setSupportNeeded(project.getSupportNeeded())
-                    .setUpdatedAt(LocalDateTime.now())
                     .build();
             return projectRepository.save(updateProject);
         }
