@@ -21,7 +21,6 @@ public class DeveloperFactory {
                 .setEmail(email)
                 .setPassword(password)
                 .setBio(bio)
-                .setUpdated_at(updatedAt)
                 .build();
     }
 }

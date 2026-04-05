@@ -5,8 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -20,30 +20,33 @@ public class Developer {
     private String email;
     private String password;
     private String bio;
+
+    @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     public Developer() {
     }
 
-    public Developer(int developerId, String username, String email, String password, String bio, LocalDateTime created_at, LocalDateTime updated_at) {
+    public Developer(int developerId, String username, String email, String password, String bio, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.developerId = developerId;
         this.username = username;
         this.email = email;
         this.password = password;
         this.bio = bio;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Developer(DeveloperBuilder developerBuilder) {
+        this.developerId = developerBuilder.developerId;
         this.email = developerBuilder.email;
         this.username = developerBuilder.username;
         this.password = developerBuilder.password;
         this.bio = developerBuilder.bio;
-        this.created_at = developerBuilder.created_at;
-        this.updated_at = developerBuilder.updated_at;
     }
 
     public int getDeveloperId() {
@@ -66,27 +69,14 @@ public class Developer {
         return bio;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        LocalDateTime now = LocalDateTime.now();
-        if (created_at == null) {
-            created_at = now;
-        }
-        updated_at = now;
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updated_at = LocalDateTime.now();
-    }
 
     @Override
     public String toString() {
@@ -96,18 +86,22 @@ public class Developer {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
-                ", created_at=" + created_at +
-                ", updated_at=" + updated_at +
+                ", created_at=" + createdAt +
+                ", updated_at=" + updatedAt +
                 '}';
     }
 
     public static class DeveloperBuilder {
+        private int developerId;
         private String username;
         private String email;
         private String password;
         private String bio;
-        private LocalDateTime created_at;
-        private LocalDateTime updated_at;
+
+        public DeveloperBuilder setDeveloperId(int developerId) {
+            this.developerId = developerId;
+            return this;
+        }
 
         public DeveloperBuilder setUsername(String username) {
             this.username = username;
@@ -129,23 +123,13 @@ public class Developer {
             return this;
         }
 
-        public DeveloperBuilder setCreated_at(LocalDateTime created_at) {
-            this.created_at = created_at;
-            return this;
-        }
-
-        public DeveloperBuilder setUpdated_at(LocalDateTime updated_at) {
-            this.updated_at = updated_at;
-            return this;
-        }
 
         public DeveloperBuilder copy(Developer developer) {
+            this.developerId = developer.developerId;
             this.username = developer.username;
             this.email = developer.email;
             this.password = developer.password;
             this.bio = developer.bio;
-            this.created_at = developer.created_at;
-            this.updated_at = developer.updated_at;
             return this;
         }
 

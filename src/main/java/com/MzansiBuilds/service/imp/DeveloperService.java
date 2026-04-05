@@ -23,7 +23,26 @@ public class DeveloperService implements IDeveloperService {
 
     @Override
     public Developer create(Developer developer) {
-        return developerRepository.save(developer);
+       if (developer == null){
+           return null;
+       }
+       if (developer.getUsername() == null || developer.getPassword() == null || developer.getEmail() == null) {
+              throw new IllegalArgumentException("Username, password, and email must not be null");
+       }
+       if (developerRepository.findByUsername(developer.getUsername()).isPresent()) {
+              throw new IllegalArgumentException("Username already exists");
+       }
+         String encodedPassword = passwordEncoder.encode(developer.getPassword());
+            Developer newDeveloper = new Developer.DeveloperBuilder()
+                    .setUsername(developer.getUsername())
+                    .setEmail(developer.getEmail())
+                    .setPassword(encodedPassword)
+                    .setBio(developer.getBio())
+//                    .setCreatedAt(LocalDateTime.now())
+//                    .setUpdatedAt(LocalDateTime.now())
+                    .build();
+
+         return developerRepository.save(newDeveloper);
     }
 
     @Override
@@ -59,12 +78,16 @@ public class DeveloperService implements IDeveloperService {
         }
         Optional<Developer> existingDeveloper = developerRepository.findById(developer.getDeveloperId());
         if(existingDeveloper.isPresent()) {
+            String passwordToStore = existingDeveloper.get().getPassword();
+            if (developer.getPassword() != null && !developer.getPassword().isBlank()) {
+                passwordToStore = passwordEncoder.encode(developer.getPassword());
+            }
+
             Developer updateDev = new Developer.DeveloperBuilder().copy(existingDeveloper.get())
                     .setUsername(developer.getUsername())
                     .setEmail(developer.getEmail())
-                    .setPassword(developer.getPassword())
+                    .setPassword(passwordToStore)
                     .setBio(developer.getBio())
-                    .setUpdated_at(LocalDateTime.now())
                     .build();
             return developerRepository.save(updateDev);
         }
