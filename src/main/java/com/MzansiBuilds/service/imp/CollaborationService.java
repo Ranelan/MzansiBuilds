@@ -55,6 +55,7 @@ public class CollaborationService implements ICollaborationRequestService {
                     : collaborationRequest.getStatus();
 
             CollaborationRequest updateRequest = new CollaborationRequest.CollaborationRequestBuilder().copy(existingRequest.get())
+                    .setMessage(collaborationRequest.getMessage())
                     .setStatus(statusToUse)
                     .build();
             return collaborationRequestRepository.save(updateRequest);
