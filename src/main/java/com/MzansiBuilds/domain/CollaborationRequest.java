@@ -48,7 +48,9 @@ public class CollaborationRequest {
     //Constructor that takes a builder object, allowing for flexible and readable object creation.
     public CollaborationRequest(CollaborationRequestBuilder collaborationRequestBuilder) {
         this.message = collaborationRequestBuilder.message;
-        this.status = collaborationRequestBuilder.status;
+        this.status = collaborationRequestBuilder.status == null
+                ? RequestStatus.PENDING
+                : collaborationRequestBuilder.status;
         this.developer = collaborationRequestBuilder.developer;
         this.project = collaborationRequestBuilder.project;
     }
@@ -94,7 +96,7 @@ public class CollaborationRequest {
     //Builder class for CollaborationRequest, allowing for flexible and readable object creation.
     public static class CollaborationRequestBuilder {
         private String message;
-        private RequestStatus status;
+        private RequestStatus status = RequestStatus.PENDING;
         private Developer developer;
         private Project project;
 
