@@ -11,6 +11,5 @@ public interface IProjectService extends IService<Project, Integer> {
     List<Project> findCelebrationWallProjects();
     List<Project> findAll();
     List<Project> findByProjectStage(List<ProjectStage> projectStage);
-    List<Project> findByTitle(String title);
     List<Project> findByDeveloperId(Integer developerId);
 }

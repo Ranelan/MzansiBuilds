@@ -8,6 +8,7 @@ public interface ICollaborationRequestService extends IService<CollaborationRequ
 
     List<CollaborationRequest> findByProjectId(Integer projectId);
     List<CollaborationRequest> findByDeveloperId(Integer developerId);
+    List<CollaborationRequest> findAll();
 
 
 }

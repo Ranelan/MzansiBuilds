@@ -47,7 +47,9 @@ public class CollaborationRequest {
 
     //Constructor that takes a builder object, allowing for flexible and readable object creation.
     public CollaborationRequest(CollaborationRequestBuilder collaborationRequestBuilder) {
+        this.requestId = collaborationRequestBuilder.requestId;
         this.message = collaborationRequestBuilder.message;
+        this.createdAt = collaborationRequestBuilder.createdAt;
         this.status = collaborationRequestBuilder.status == null
                 ? RequestStatus.PENDING
                 : collaborationRequestBuilder.status;
@@ -95,10 +97,17 @@ public class CollaborationRequest {
 
     //Builder class for CollaborationRequest, allowing for flexible and readable object creation.
     public static class CollaborationRequestBuilder {
+        private int requestId;
         private String message;
+        private LocalDateTime createdAt;
         private RequestStatus status = RequestStatus.PENDING;
         private Developer developer;
         private Project project;
+
+        public CollaborationRequestBuilder setRequestId(int requestId) {
+            this.requestId = requestId;
+            return this;
+        }
 
         public CollaborationRequestBuilder setMessage(String message) {
             this.message = message;
@@ -121,9 +130,16 @@ public class CollaborationRequest {
             return this;
         }
 
+        public CollaborationRequestBuilder setCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
         //Copy method to be used for updating, Allowing to modify only the fields that need to be updated while keeping the rest of the data intact.
         public CollaborationRequestBuilder copy(CollaborationRequest collaborationRequest) {
+            this.requestId = collaborationRequest.requestId;
             this.message = collaborationRequest.message;
+            this.createdAt = collaborationRequest.createdAt;
             this.status = collaborationRequest.status;
             this.developer = collaborationRequest.developer;
             this.project = collaborationRequest.project;

@@ -74,7 +74,12 @@ public class CollaborationService implements ICollaborationRequestService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public List<CollaborationRequest> findAll() {
+        return collaborationRequestRepository.findAll();
+    }
 
+    @Override
+    public void delete(Integer id) {
+        collaborationRequestRepository.deleteById(id);
     }
 }
