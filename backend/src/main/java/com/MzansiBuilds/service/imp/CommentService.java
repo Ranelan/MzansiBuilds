@@ -32,7 +32,7 @@ public class CommentService implements ICommentService {
         }
         Optional<Comment> existingComment = commentRepository.findById(comment.getCommentId());
         if(existingComment.isPresent()){
-            Comment updateComment = new Comment.CommentBuilder().copy(comment)
+            Comment updateComment = new Comment.CommentBuilder().copy(existingComment.get())
                     .setContent(comment.getContent())
                     .build();
             return commentRepository.save(updateComment);

@@ -39,7 +39,9 @@ public class Comment {
 
     //Constructor that takes a builder object, allowing for flexible and readable object creation.
     public Comment(CommentBuilder commentBuilder) {
+        this.commentId = commentBuilder.commentId;
         this.content = commentBuilder.content;
+        this.createdAt = commentBuilder.createdAt;
         this.developer = commentBuilder.developer;
         this.project = commentBuilder.project;
     }
@@ -79,9 +81,16 @@ public class Comment {
     }
 
     public static class CommentBuilder {
+        private int commentId;
         private String content;
+        private LocalDateTime createdAt;
         private Developer developer;
         private Project project;
+
+        public CommentBuilder setCommentId(int commentId) {
+            this.commentId = commentId;
+            return this;
+        }
 
         public CommentBuilder setContent(String content) {
             this.content = content;
@@ -98,8 +107,17 @@ public class Comment {
             return this;
         }
 
+        public CommentBuilder setCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
         public CommentBuilder copy(Comment comment) {
+            this.commentId = comment.commentId;
             this.content = comment.content;
+            this.createdAt = comment.createdAt;
+            this.developer = comment.developer;
+            this.project = comment.project;
             return this;
         }
 
