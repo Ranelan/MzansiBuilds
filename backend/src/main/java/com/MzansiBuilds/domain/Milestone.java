@@ -36,8 +36,10 @@ public class Milestone {
 
     //Constructor that takes a builder object, allowing for flexible and readable object creation.
     public Milestone(MilestoneBuilder milestoneBuilder) {
+        this.milestoneId = milestoneBuilder.milestoneId;
         this.title = milestoneBuilder.title;
         this.description = milestoneBuilder.description;
+        this.achievedAt = milestoneBuilder.achievedAt;
         this.project = milestoneBuilder.project;
     }
 
@@ -75,9 +77,16 @@ public class Milestone {
     }
 
     public static class MilestoneBuilder {
+        private int milestoneId;
         private String title;
         private String description;
+        private LocalDateTime achievedAt;
         private Project project;
+
+        public MilestoneBuilder setMilestoneId(int milestoneId) {
+            this.milestoneId = milestoneId;
+            return this;
+        }
 
         public MilestoneBuilder setTitle(String title) {
             this.title = title;
@@ -95,10 +104,17 @@ public class Milestone {
             return this;
         }
 
+        public MilestoneBuilder setAchievedAt(LocalDateTime achievedAt) {
+            this.achievedAt = achievedAt;
+            return this;
+        }
+
         //Copy method to be used for updating, Allowing to modify only the fields that need to be updated while keeping the rest of the data intact.
         public MilestoneBuilder copy(Milestone milestone) {
+            this.milestoneId = milestone.milestoneId;
             this.title = milestone.title;
             this.description = milestone.description;
+            this.achievedAt = milestone.achievedAt;
             this.project = milestone.project;
             return this;
         }
