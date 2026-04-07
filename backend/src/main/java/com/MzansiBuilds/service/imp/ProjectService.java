@@ -90,7 +90,7 @@ public class ProjectService implements IProjectService {
 
     @Override
     public List<Project> findCelebrationWallProjects() {
-        return projectRepository.findByProjectStageContainingOrderByUpdatedAtDesc(ProjectStage.LAUNCHED);
+        return projectRepository.findByStageOrderByUpdatedAtDesc(ProjectStage.LAUNCHED);
     }
 
     @Override
@@ -103,10 +103,6 @@ public class ProjectService implements IProjectService {
         return projectRepository.findByProjectStage(projectStage);
     }
 
-    @Override
-    public List<Project> findByTitle(String title) {
-        return projectRepository.findByTitle(title);
-    }
 
     @Override
     public List<Project> findByDeveloperId(Integer developerId) {

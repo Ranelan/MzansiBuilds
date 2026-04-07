@@ -28,9 +28,15 @@ public class Project {
     private LocalDateTime updatedAt;
 
     //Enums for project stage and support needed.
+    @ElementCollection(targetClass = ProjectStage.class)
+    @CollectionTable(name = "project_stage", joinColumns = @JoinColumn(name = "project_id"))
+    @Column(name = "stage")
     @Enumerated(EnumType.STRING)
     private List<ProjectStage> projectStage;
 
+    @ElementCollection(targetClass = Support.class)
+    @CollectionTable(name = "project_support_needed", joinColumns = @JoinColumn(name = "project_id"))
+    @Column(name = "support")
     @Enumerated(EnumType.STRING)
     private List<Support> supportNeeded;
 

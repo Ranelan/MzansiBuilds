@@ -19,5 +19,5 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     //Ai used here to implement a custom query to find projects by their project stage, reviewed the code before implementing,
     @Query("select distinct p from Project p join p.projectStage ps where ps = :stage order by p.updatedAt desc")
-    List<Project> findByProjectStageContainingOrderByUpdatedAtDesc(@Param("stage") ProjectStage stage);
+    List<Project> findByStageOrderByUpdatedAtDesc(@Param("stage") ProjectStage stage);
 }
