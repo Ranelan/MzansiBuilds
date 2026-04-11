@@ -1,6 +1,7 @@
 package com.MzansiBuilds.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record DeveloperUpdateRequestDto(
@@ -11,7 +12,7 @@ public record DeveloperUpdateRequestDto(
         @Email(message = "Invalid email format")
         String email,
 
-        @Size(min = 6, message = "Password must be at least 6 characters")
+        @Pattern(regexp = "^$|.{6,}", message = "Password must be at least 6 characters")
         String password,
 
         @Size(max = 500, message = "Bio must be at most 500 characters")

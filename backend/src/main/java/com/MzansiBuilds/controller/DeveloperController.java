@@ -1,11 +1,13 @@
 package com.MzansiBuilds.controller;
 
 import com.MzansiBuilds.domain.Developer;
+import com.MzansiBuilds.dto.AuthResponseDto;
 import com.MzansiBuilds.dto.DeveloperCreateRequestDto;
 import com.MzansiBuilds.dto.DeveloperResponseDto;
 import com.MzansiBuilds.dto.DeveloperUpdateRequestDto;
 import com.MzansiBuilds.dto.LoginRequestDto;
 import com.MzansiBuilds.service.imp.DeveloperService;
+import com.MzansiBuilds.util.JwtUtil;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -26,6 +28,9 @@ public class DeveloperController {
     @Autowired
     private DeveloperService developerService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @PostMapping("/register")
     public ResponseEntity<DeveloperResponseDto> registerDeveloper(@Valid @RequestBody DeveloperCreateRequestDto developer) {
         Developer developerToCreate = new Developer.DeveloperBuilder()
@@ -40,10 +45,21 @@ public class DeveloperController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<DeveloperResponseDto> loginDeveloper(@Valid @RequestBody LoginRequestDto loginRequest) {
+    public ResponseEntity<AuthResponseDto> loginDeveloper(@Valid @RequestBody LoginRequestDto loginRequest) {
         try {
             Developer developer = developerService.login(loginRequest.username(), loginRequest.password());
-            return ResponseEntity.ok(toResponseDto(developer));
+            String token = jwtUtil.generateToken(developer.getUsername());
+
+            AuthResponseDto authResponse = new AuthResponseDto(
+                    token,
+                    "Bearer",
+                    jwtUtil.getJwtExpirationInMs(),
+                    developer.getDeveloperId(),
+                    developer.getUsername(),
+                    developer.getEmail()
+            );
+
+            return ResponseEntity.ok(authResponse);
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -109,7 +125,6 @@ public class DeveloperController {
         return ResponseEntity.noContent().build();
     }
 
-    //AI used to generate this method, it converts a CollaborationRequest entity to a CollaborationRequestResponseDto
     private DeveloperResponseDto toResponseDto(Developer developer) {
         return new DeveloperResponseDto(
                 developer.getDeveloperId(),

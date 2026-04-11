@@ -16,7 +16,9 @@ public class Developer {
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private int developerId;
+    @Column(unique = true)
     private String username;
+    @Column(unique = true)
     private String email;
     private String password;
     private String bio;
@@ -84,7 +86,6 @@ public class Developer {
                 "developer_id=" + developerId +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", bio='" + bio + '\'' +
                 ", created_at=" + createdAt +
                 ", updated_at=" + updatedAt +
