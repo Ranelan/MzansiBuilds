@@ -14,6 +14,8 @@ import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,12 +90,39 @@ public class CollaborationRequestController {
         return ResponseEntity.ok(requests);
     }
 
+    //Ai used partially to help generate this method, it updates a collaboration request.
+    // It checks if the current user is either the sender or the project owner before allowing updates.
+    // If the status is being updated, only the project owner can do that.
     @PutMapping("/update/{id}")
     public ResponseEntity<CollaborationRequestResponseDto> updateRequest(@PathVariable @Positive Integer id,
                                                                          @Valid @RequestBody CollaborationRequestUpdateRequestDto request) {
         CollaborationRequest existing = collaborationRequestService.read(id);
         if (existing == null) {
             return ResponseEntity.notFound().build();
+        }
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String currentUsername;
+        if (principal instanceof UserDetails userDetails) {
+            currentUsername = userDetails.getUsername();
+        } else {
+            currentUsername = principal.toString();
+        }
+
+        String senderUsername = existing.getDeveloper() != null ? existing.getDeveloper().getUsername() : null;
+        String ownerUsername = (existing.getProject() != null && existing.getProject().getDeveloper() != null)
+                ? existing.getProject().getDeveloper().getUsername()
+                : null;
+
+        boolean isSender = currentUsername.equals(senderUsername);
+        boolean isProjectOwner = currentUsername.equals(ownerUsername);
+
+        if (!isSender && !isProjectOwner) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        if (request.status() != null && !isProjectOwner) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         CollaborationRequest requestToUpdate = new CollaborationRequest.CollaborationRequestBuilder()
