@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MzansiBuilds - Welcome</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-page="auth">
+  <header class="topbar">
+    <div class="container">
+      <a class="brand" href="index.html">MzansiBuilds</a>
+      <nav class="nav">
+        <a href="celebrationWall.html">Celebration wall</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="notice" class="notice hidden"></div>
+
+    <div class="card">
+      <div class="actions" style="justify-content: space-between;">
+        <div>
+          <h1>Welcome</h1>
+          <p class="small">Create an account or log in to continue.</p>
+        </div>
+
+        <div class="actions">
+          <button id="showLoginBtn" class="primary" type="button">Login</button>
+          <button id="showRegisterBtn" type="button">Register</button>
+        </div>
+      </div>
+
+      <section id="loginPanel" style="margin-top: 16px;">
+        <h2>Login</h2>
+        <form id="loginForm" class="grid">
+          <div class="row row-2">
+            <div>
+              <label for="login_username">Username</label>
+              <input id="login_username" required />
+            </div>
+            <div>
+              <label for="login_password">Password</label>
+              <input id="login_password" type="password" required minlength="6" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" type="submit">Login</button>
+            <button id="clearSessionBtn" type="button">Clear local session</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="registerPanel" class="hidden" style="margin-top: 16px;">
+        <h2>Register</h2>
+        <form id="registerForm" class="grid">
+          <div class="row row-2">
+            <div>
+              <label for="reg_username">Username</label>
+              <input id="reg_username" required minlength="3" maxlength="30" />
+            </div>
+            <div>
+              <label for="reg_email">Email</label>
+              <input id="reg_email" type="email" required />
+            </div>
+          </div>
+
+          <div class="row row-2">
+            <div>
+              <label for="reg_password">Password</label>
+              <input id="reg_password" type="password" required minlength="6" />
+            </div>
+            <div>
+              <label for="reg_bio">Bio (optional)</label>
+              <input id="reg_bio" maxlength="500" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" type="submit">Create account</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
