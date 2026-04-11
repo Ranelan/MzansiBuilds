@@ -4,174 +4,179 @@ import com.MzansiBuilds.domain.Developer;
 import com.MzansiBuilds.domain.Project;
 import com.MzansiBuilds.enums.ProjectStage;
 import com.MzansiBuilds.enums.Support;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import com.MzansiBuilds.repository.ProjectRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@Transactional
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ExtendWith(MockitoExtension.class)
 class ProjectServiceTest {
 
-    @Autowired
+    @Mock
+    private ProjectRepository projectRepository;
+
+    @InjectMocks
     private ProjectService projectService;
 
-    @Autowired
-    private DeveloperService developerService;
-
     private Developer developer;
+    private Project project;
 
     @BeforeEach
     void setUp() {
-        String unique = UUID.randomUUID().toString().substring(0, 8);
         developer = new Developer.DeveloperBuilder()
-                .setUsername("testdeveloper_" + unique)
+                .setDeveloperId(1)
+                .setUsername("dev1")
+                .setEmail("dev1@gmail.com")
                 .setPassword("password@123")
-                .setEmail("testdev_" + unique + "@gmail.com")
                 .setBio("Test developer for project service tests")
                 .build();
-        developer = developerService.create(developer);
-        assertTrue(developer.getDeveloperId() > 0, "Developer ID should be generated after creation");
+
+        project = buildProject(1, "Project One", List.of(ProjectStage.PLANNING), developer);
     }
 
     @Test
-    @Order(1)
     void create() {
-        Project created = projectService.create(buildProject("Project Create", List.of(ProjectStage.PLANNING), developer));
+        when(projectRepository.save(any(Project.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Project created = projectService.create(buildProject(0, "Project Create", List.of(ProjectStage.PLANNING), developer));
 
         assertNotNull(created);
-        assertTrue(created.getProjectId() > 0);
         assertEquals("Project Create", created.getTitle());
+        assertEquals("Description for Project Create", created.getDescription());
         assertEquals(developer.getDeveloperId(), created.getDeveloper().getDeveloperId());
+        verify(projectRepository, times(1)).save(any(Project.class));
+
+        assertNull(projectService.create(null));
     }
 
     @Test
-    @Order(2)
     void read() {
-        Project created = projectService.create(buildProject("Project Read", List.of(ProjectStage.IN_PROGRESS), developer));
+        when(projectRepository.findById(1)).thenReturn(Optional.of(project));
+        when(projectRepository.findById(99)).thenReturn(Optional.empty());
 
-        Project found = projectService.read(created.getProjectId());
-
-        assertNotNull(found);
-        assertEquals(created.getProjectId(), found.getProjectId());
-        assertEquals("Project Read", found.getTitle());
+        assertNotNull(projectService.read(1));
+        assertEquals("Project One", projectService.read(1).getTitle());
+        assertNull(projectService.read(99));
     }
 
     @Test
-    @Order(3)
     void update() {
-        Project created = projectService.create(buildProject("Project Update", List.of(ProjectStage.PLANNING), developer));
-
-        Project toUpdate = new Project.ProjectBuilder()
-                .copy(created)
+        Project existing = buildProject(1, "Project Update", List.of(ProjectStage.PLANNING), developer);
+        Project updateRequest = new Project.ProjectBuilder()
+                .copy(existing)
                 .setTitle("Project Update v2")
                 .setDescription("Updated description")
                 .setTechStack("Spring Boot, MySQL")
                 .setRepoLink("https://github.com/example/project-update-v2")
                 .setProjectStage(new ArrayList<>(List.of(ProjectStage.TESTING)))
                 .setSupportNeeded(new ArrayList<>(List.of(Support.FEEDBACK)))
-                .setDeveloper(created.getDeveloper())
                 .build();
 
-        Project updated = projectService.update(toUpdate);
+        when(projectRepository.findById(1)).thenReturn(Optional.of(existing));
+        when(projectRepository.save(any(Project.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Project updated = projectService.update(updateRequest);
 
         assertNotNull(updated);
-        assertEquals(created.getProjectId(), updated.getProjectId());
+        assertEquals(1, updated.getProjectId());
         assertEquals("Project Update v2", updated.getTitle());
         assertTrue(updated.getProjectStage().contains(ProjectStage.TESTING));
+
+        assertNull(projectService.update(null));
+        assertNull(projectService.update(new Project.ProjectBuilder().setProjectId(0).build()));
+
+        when(projectRepository.findById(2)).thenReturn(Optional.empty());
+        assertNull(projectService.update(buildProject(2, "Missing", List.of(ProjectStage.PLANNING), developer)));
     }
 
     @Test
-    @Order(4)
     void completeProject() {
-        Project created = projectService.create(buildProject("Project Complete", List.of(ProjectStage.IN_PROGRESS), developer));
+        Project existing = buildProject(1, "Project Complete", List.of(ProjectStage.IN_PROGRESS), developer);
 
-        Project completed = projectService.completeProject(created.getProjectId());
+        when(projectRepository.findById(1)).thenReturn(Optional.of(existing));
+        when(projectRepository.save(any(Project.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Project completed = projectService.completeProject(1);
 
         assertNotNull(completed);
         assertTrue(completed.getProjectStage().contains(ProjectStage.LAUNCHED));
         assertTrue(completed.getProjectStage().contains(ProjectStage.IN_PROGRESS));
+
+        assertNull(projectService.completeProject(null));
+        when(projectRepository.findById(99)).thenReturn(Optional.empty());
+        assertNull(projectService.completeProject(99));
     }
 
     @Test
-    @Order(5)
     void findCelebrationWallProjects() {
-        Project launchedCandidate = projectService.create(buildProject("Launched Candidate", List.of(ProjectStage.TESTING), developer));
-        Project notLaunched = projectService.create(buildProject("Not Launched", List.of(ProjectStage.PLANNING), developer));
-        projectService.completeProject(launchedCandidate.getProjectId());
+        Project launched = buildProject(1, "Launched Project", List.of(ProjectStage.LAUNCHED), developer);
+        when(projectRepository.findByStageOrderByUpdatedAtDesc(ProjectStage.LAUNCHED)).thenReturn(List.of(launched));
 
         List<Project> projects = projectService.findCelebrationWallProjects();
 
-        assertTrue(projects.stream().anyMatch(p -> p.getProjectId() == launchedCandidate.getProjectId()));
-        assertFalse(projects.stream().anyMatch(p -> p.getProjectId() == notLaunched.getProjectId()));
+        assertEquals(1, projects.size());
+        assertEquals("Launched Project", projects.get(0).getTitle());
     }
 
     @Test
-    @Order(6)
     void findAll() {
-        Project first = projectService.create(buildProject("All First", List.of(ProjectStage.PLANNING), developer));
-        Project second = projectService.create(buildProject("All Second", List.of(ProjectStage.TESTING), developer));
+        Project first = buildProject(1, "All First", List.of(ProjectStage.PLANNING), developer);
+        Project second = buildProject(2, "All Second", List.of(ProjectStage.TESTING), developer);
+
+        when(projectRepository.findAll()).thenReturn(List.of(first, second));
 
         List<Project> projects = projectService.findAll();
 
-        assertTrue(projects.stream().anyMatch(p -> p.getProjectId() == first.getProjectId()));
-        assertTrue(projects.stream().anyMatch(p -> p.getProjectId() == second.getProjectId()));
+        assertEquals(2, projects.size());
+        assertEquals("All First", projects.get(0).getTitle());
+        assertEquals("All Second", projects.get(1).getTitle());
     }
 
     @Test
-    @Order(7)
     void findByProjectStage() {
-        Project testingProject = projectService.create(buildProject("Stage Testing", List.of(ProjectStage.TESTING), developer));
-        projectService.create(buildProject("Stage Planning", List.of(ProjectStage.PLANNING), developer));
+        Project testingProject = buildProject(1, "Stage Testing", List.of(ProjectStage.TESTING), developer);
+        when(projectRepository.findByProjectStage(List.of(ProjectStage.TESTING))).thenReturn(List.of(testingProject));
 
         List<Project> testingProjects = projectService.findByProjectStage(List.of(ProjectStage.TESTING));
 
-        assertTrue(testingProjects.stream().anyMatch(p -> p.getProjectId() == testingProject.getProjectId()));
-        assertTrue(testingProjects.stream().allMatch(p -> p.getProjectStage().contains(ProjectStage.TESTING)));
+        assertEquals(1, testingProjects.size());
+        assertEquals("Stage Testing", testingProjects.get(0).getTitle());
+        assertTrue(testingProjects.get(0).getProjectStage().contains(ProjectStage.TESTING));
     }
 
     @Test
-    @Order(8)
     void findByDeveloperId() {
-        Project ownProject = projectService.create(buildProject("Own Project", List.of(ProjectStage.IN_PROGRESS), developer));
+        Project ownProject = buildProject(1, "Own Project", List.of(ProjectStage.IN_PROGRESS), developer);
 
-        String unique = UUID.randomUUID().toString().substring(0, 8);
-        Developer anotherDeveloper = developerService.create(new Developer.DeveloperBuilder()
-                .setUsername("otherdev_" + unique)
-                .setPassword("password@123")
-                .setEmail("otherdev_" + unique + "@gmail.com")
-                .setBio("Another dev")
-                .build());
+        when(projectRepository.findByDeveloperDeveloperId(1)).thenReturn(List.of(ownProject));
 
-        Project otherProject = projectService.create(buildProject("Other Project", List.of(ProjectStage.IN_PROGRESS), anotherDeveloper));
+        List<Project> ownProjects = projectService.findByDeveloperId(1);
 
-        List<Project> ownProjects = projectService.findByDeveloperId(developer.getDeveloperId());
-
-        assertTrue(ownProjects.stream().anyMatch(p -> p.getProjectId() == ownProject.getProjectId()));
-        assertFalse(ownProjects.stream().anyMatch(p -> p.getProjectId() == otherProject.getProjectId()));
+        assertEquals(1, ownProjects.size());
+        assertEquals("Own Project", ownProjects.get(0).getTitle());
     }
 
     @Test
-    @Order(9)
     void delete() {
-        Project created = projectService.create(buildProject("Delete Project", List.of(ProjectStage.PLANNING), developer));
+        projectService.delete(1);
 
-        projectService.delete(created.getProjectId());
-
-        Project found = projectService.read(created.getProjectId());
-        assertNull(found);
+        verify(projectRepository, times(1)).deleteById(1);
     }
 
-    private Project buildProject(String title, List<ProjectStage> stages, Developer owner) {
+    private Project buildProject(int projectId, String title, List<ProjectStage> stages, Developer owner) {
         return new Project.ProjectBuilder()
+                .setProjectId(projectId)
                 .setTitle(title)
                 .setDescription("Description for " + title)
                 .setTechStack("Java, Spring Boot")
